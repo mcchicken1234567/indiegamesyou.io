@@ -26,7 +26,6 @@
 
         .hidden { display: none !important; }
 
-        /* General Card Styling */
         .card {
             background: var(--surface);
             padding: 40px;
@@ -60,7 +59,6 @@
             margin-top: 10px;
         }
 
-        /* Dashboard Grid */
         .dashboard {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -85,7 +83,7 @@
 <body>
 
     <div id="login-page" class="card">
-        <h1 style="color: var(--accent);">IndieGamesYou.io</h1>
+        <h1 style="color: var(--accent);">FORGE</h1>
         <input type="email" id="user-email" placeholder="Email Address">
         <button class="btn" onclick="goToDashboard()">Enter Portal</button>
     </div>
@@ -109,11 +107,15 @@
 
     <div id="publish-page" class="card hidden">
         <h2 style="color: var(--accent);">Submit Project</h2>
-        <input type="text" placeholder="Game Name">
-        <textarea placeholder="Game Description" rows="4"></textarea>
-        <p style="font-size: 0.8rem; color: var(--text-dim);">Upload Thumbnail:</p>
+        <input type="text" id="game-name" placeholder="Game Name" required>
+        <textarea id="game-desc" placeholder="Game Description" rows="4"></textarea>
+        
+        <input type="url" id="game-url" placeholder="Game File URL (Drive, Mega, etc.)" required>
+        
+        <p style="font-size: 0.8rem; color: var(--text-dim);">Thumbnail (Optional):</p>
         <input type="file" style="border: none;">
-        <button class="btn" onclick="submitGame()">Upload to Forge</button>
+        
+        <button class="btn" onclick="submitGame()">Submit for Review</button>
         <button class="btn" onclick="backToDashboard()" style="background: #333; color: white;">Cancel</button>
     </div>
 
@@ -127,7 +129,6 @@
     </div>
 
     <script>
-        // Navigation Logic
         function goToDashboard() {
             const email = document.getElementById('user-email').value;
             if (email.includes("@")) {
@@ -148,8 +149,30 @@
             document.getElementById('store-page').classList.add('hidden');
         }
 
+        // UPDATED SUBMISSION LOGIC
         function submitGame() {
-            alert("Success! Your game has been sent for review.");
+            const name = document.getElementById('game-name').value;
+            const desc = document.getElementById('game-desc').value;
+            const url = document.getElementById('game-url').value;
+
+            // Check if URL and Name are empty
+            if (!name || !url) {
+                alert("Please provide both a Game Name and a Download URL.");
+                return;
+            }
+
+            // Create the Email Data
+            const subject = encodeURIComponent("Game Review Request: " + name);
+            const body = encodeURIComponent(
+                "Game Name: " + name + "\n\n" +
+                "Description: " + desc + "\n\n" +
+                "Download URL: " + url
+            );
+
+            // Open Email Client
+            window.location.href = `mailto:indiegamesio@gmail.com?subject=${subject}&body=${body}`;
+
+            alert("Opening your email client to send the review...");
             backToDashboard();
         }
     </script>

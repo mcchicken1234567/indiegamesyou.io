@@ -3,126 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Indie Store</title>
+    <title>Nexus // Developer Portal</title>
     <style>
-        /* 1. Resetting basics to ensure visibility */
-        html, body {
-            background-color: #050505 !important;
-            color: #ffffff !important;
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
+        :root {
+            --bg: #050505;
+            --surface: #111114;
+            --accent: #00ff88;
+            --text: #ffffff;
         }
 
-        /* 2. Main Wrapper */
-        .wrapper {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            /* This red border is a test. If you see it, the HTML is working! */
-            border: 1px solid #333; 
-        }
-
-        header {
-            margin-bottom: 50px;
-            border-bottom: 2px solid #00ff88;
-            padding-bottom: 20px;
-        }
-
-        .logo {
-            font-size: 2.5rem;
+        body {
+            background: var(--bg);
+            color: var(--text);
             font-family: sans-serif;
-            font-weight: bold;
-            color: #00ff88;
-            text-transform: uppercase;
-        }
-
-        /* 3. Game Row Styling */
-        .game-entry {
-            background: #111114;
+            margin: 0;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
             padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            transition: 0.2s;
         }
 
-        .game-entry:hover {
-            background: #1c1c21;
+        .container { width: 100%; max-width: 600px; }
+
+        /* Login Box */
+        #login-section {
+            background: var(--surface);
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 50px;
+            text-align: center;
+            border: 1px solid #222;
         }
 
-        .game-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            display: block;
-        }
-
-        .game-tags {
-            color: #888;
-            font-size: 0.8rem;
-            margin-top: 5px;
-        }
-
-        .price-tag {
-            color: #00ff88;
-            font-weight: bold;
-            font-family: monospace;
-            font-size: 1.1rem;
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #000;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 6px;
         }
 
         .btn {
-            background: #00ff88;
+            background: var(--accent);
             color: black;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 4px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
             font-weight: bold;
-            font-size: 0.9rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
         }
+
+        /* Hidden Sections */
+        #publish-section, #success-msg {
+            display: none;
+            background: var(--surface);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--accent);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 900px;
+            padding: 20px;
+        }
+
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <div class="wrapper">
-        <header>
-            <div class="logo">NEXUS</div>
-            <p style="color: #888;">Modern Indie Game Marketplace</p>
-        </header>
-
-        <section>
-            <h2 style="margin-bottom: 20px;">Trending Now</h2>
-            
-            <div class="game-entry">
-                <div>
-                    <span class="game-title">VOID WALKER</span>
-                    <div class="game-tags">Action • Sci-Fi • 3D</div>
-                </div>
-                <div class="price-tag">$12.00</div>
-                <a href="#" class="btn">VIEW</a>
-            </div>
-
-            <div class="game-entry">
-                <div>
-                    <span class="game-title">PIXEL QUEST</span>
-                    <div class="game-tags">RPG • Retro • Adventure</div>
-                </div>
-                <div class="price-tag">FREE</div>
-                <a href="#" class="btn">VIEW</a>
-            </div>
-
-            <div class="game-entry">
-                <div>
-                    <span class="game-title">NEON DRIFT</span>
-                    <div class="game-tags">Racing • Arcade</div>
-                </div>
-                <div class="price-tag">$5.00</div>
-                <a href="#" class="btn">VIEW</a>
-            </div>
-        </section>
+    <div class="nav">
+        <h1 style="color: var(--accent); margin: 0;">NEXUS</h1>
+        <div id="user-display">Guest Mode</div>
     </div>
+
+    <div class="container">
+        <div id="login-section">
+            <h2>Developer Sign In</h2>
+            <p style="color: #888;">Enter details to publish your project.</p>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button class="btn" onclick="handleLogin()">Sign In</button>
+            <p id="error-msg" style="color: #ff4444; font-size: 0.8rem;"></p>
+        </div>
+
+        <div id="publish-section">
+            <h2>Publish New Game</h2>
+            <input type="text" id="game-title" placeholder="Game Title">
+            <textarea id="game-desc" placeholder="Brief Description" style="width:100%; height:100px; background:#000; color:white; border:1px solid #333; border-radius:6px; padding:10px; margin-bottom:10px;"></textarea>
+            <input type="text" id="game-link" placeholder="Download URL (e.g. Dropbox or Drive link)">
+            <button class="btn" onclick="publishGame()">Submit Project</button>
+        </div>
+
+        <div id="success-msg">
+            <h2 style="color: var(--accent);">✔ Project Submitted!</h2>
+            <p>Your game has been sent to the Nexus queue for review.</p>
+            <button class="btn" onclick="window.location.reload()">Back to Store</button>
+        </div>
+    </div>
+
+    <script>
+        // Use these "fake" credentials for testing
+        const VALID_USER = "admin";
+        const VALID_PASS = "1234";
+
+        function handleLogin() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const error = document.getElementById('error-msg');
+
+            if (user === VALID_USER && pass === VALID_PASS) {
+                // Hide Login, Show Publish
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('publish-section').style.display = 'block';
+                document.getElementById('user-display').innerText = "Logged in as: " + user;
+            } else {
+                error.innerText = "Invalid username or password. Try admin / 1234";
+            }
+        }
+
+        function publishGame() {
+            const title = document.getElementById('game-title').value;
+            if(title === "") {
+                alert("Please enter a game title!");
+                return;
+            }
+            // Hide Publish, Show Success
+            document.getElementById('publish-section').style.display = 'none';
+            document.getElementById('success-msg').style.display = 'block';
+        }
+    </script>
 
 </body>
 </html>
